@@ -13,7 +13,8 @@
         });
 
     /*@ngInject*/
-    function taskController($rootScope, $scope, $interval, $state, $timeout, $filter, orderByFilter, config, taskStore, utils) {
+
+    function taskController($rootScope, $scope, $interval, $state, $timeout, $filter, $stateParams, orderByFilter, config, taskStore, utils) {
 
         var vm = this,
             jobTimer,
@@ -21,6 +22,13 @@
             count;
 
         vm.tasksStatus = ["processing", "finished", "failed"];
+        vm.taskList = [];
+        vm.isDataLoading = true;
+        vm.flag = false;
+        vm.filterBy = "job_id";
+        vm.filterByValue = "Task ID";
+        vm.filterPlaceholder = "Task ID";
+        count = 1;
 
         vm.goToTaskDetail = goToTaskDetail;
         vm.getStatusText = getStatusText;
@@ -29,11 +37,9 @@
         vm.filterByStatus = filterByStatus;
         vm.filterByCreatedDate = filterByCreatedDate;
         vm.clearDate = clearDate;
-        vm.taskList = [];
-        vm.isDataLoading = true;
-        count = 1;
+        vm.clearAllFilters = clearAllFilters;
         vm.addTooltip = addTooltip;
-        vm.flag = false;
+        vm.changingFilterBy = changingFilterBy;
 
         vm.date = {
             fromDate: "",
@@ -58,6 +64,9 @@
         init();
 
         function init() {
+            vm.clusterId = $stateParams.clusterId;
+            $rootScope.selectedClusterOption = vm.clusterId;
+
             taskStore.getJobList()
                 .then(function(data) {
                     //data = orderByFilter(data, "created_at", "job_id");
@@ -186,6 +195,32 @@
             } else if (type === "to") {
                 vm.date.toDate = "";
             }
+        }
+
+        function clearAllFilters() {
+            vm.date.toDate = "";
+            vm.date.fromDate = "";
+            vm.invalidToDate = false;
+            vm.filterBy = "job_id";
+            vm.filterByValue = "Task ID";
+            vm.filterPlaceholder = "Task ID";
+            vm.searchBy = {};
+            vm.tasksStatus = ["processing", "finished", "failed"];
+        }
+
+        function changingFilterBy(filterValue) {
+            vm.filterBy = filterValue;
+            switch (filterValue) {
+                case "job_id":
+                    vm.filterByValue = "Task ID";
+                    vm.filterPlaceholder = "Task ID";
+                    break;
+
+                case "flow":
+                    vm.filterByValue = "Task";
+                    vm.filterPlaceholder = "Task";
+                    break;
+            };
         }
     }
 

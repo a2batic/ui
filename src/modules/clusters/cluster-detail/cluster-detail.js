@@ -33,6 +33,7 @@
          */
         function init() {
             vm.clusterId = $stateParams.clusterId;
+            $rootScope.selectedClusterOption = vm.clusterId;
 
             if (!$rootScope.clusterData) {
                 clusterStore.getClusterList()
@@ -109,17 +110,19 @@
             vm.clusterObj = clusterStore.getClusterDetails(vm.clusterId);
             vm.clusterName = vm.clusterObj.cluster_id || "NA";
             vm.clusterStatus = clusterStore.checkStatus(vm.clusterObj);
+            _selectCluster();
         }
 
         $scope.$on("GotClusterData", function(event, data) {
-            var clusterData,
-                len,
+            _selectCluster();
+        });
+
+        function _selectCluster() {
+            var clusterData = $rootScope.clusterData,
+                len = clusterData.length,
                 i;
 
             if ($rootScope.clusterData !== null && typeof vm.clusterId !== "undefined") {
-                clusterData = $rootScope.clusterData;
-                len = clusterData.length;
-
                 for (i = 0; i < len; i++) {
 
                     if (clusterData[i].cluster_id === vm.clusterId) {
@@ -128,7 +131,7 @@
                     }
                 }
             }
-        });
+        }
 
     }
 

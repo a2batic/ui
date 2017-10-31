@@ -203,8 +203,8 @@
                 getAlertListRequest,
                 request;
 
-            //url = "/api/alerts.json";
-            url = config.baseUrl + "alerts";
+            url = "/api/alerts.json";
+            // url = config.baseUrl + "notifications";
 
             getAlertListRequest = {
                 method: "GET",
@@ -230,25 +230,25 @@
             return filteredList;
         };
 
-        vm.getNotificationList = function() {
+        vm.getEventList = function() {
             var url,
-                getNotificationListRequest,
+                getEventListRequest,
                 request;
 
-            //url = "/api/notification.json";
+            //url = "/api/events.json";
             url = config.baseUrl + "notifications";
 
-            getNotificationListRequest = {
+            getEventListRequest = {
                 method: "GET",
                 url: url
             };
 
-            request = angular.copy(getNotificationListRequest);
+            request = angular.copy(getEventListRequest);
             return $http(request).then(function(response) {
                 return response.data;
             }, function(e) {
                 vm.checkErrorCode(e);
-                console.log("Error Occurred: while fetching getNotificationList");
+                console.log("Error Occurred: while fetching getEventList");
                 return null;
             });
         };

@@ -7,7 +7,7 @@
     storageModule.provider("config", function() {
 
         /*Ideally this config should only contain
-        configuration related stuff . it should not hold 
+        configuration related stuff . it should not hold
         cluster data */
         var config = {};
 
@@ -60,6 +60,18 @@
                         url: "/cluster-detail/:clusterId",
                         template: "<cluster-detail></cluster-detail>"
                     })
+                    .state("cluster-hosts", {
+                        url: "/cluster-hosts/:clusterId",
+                        template: "<cluster-hosts></cluster-hosts>"
+                    })
+                    .state("cluster-volumes", {
+                        url: "/cluster-volumes/:clusterId",
+                        template: "<cluster-volumes></cluster-volumes>"
+                    })
+                    .state("cluster-events", {
+                        url: "/cluster-events/:clusterId",
+                        template: "<cluster-events></cluster-events>"
+                    })
                     .state("hosts", {
                         url: "/hosts",
                         template: "<host-list></host-list>"
@@ -72,8 +84,12 @@
                         url: "/cluster-detail/:clusterId/volume-detail/:volumeId",
                         template: "<volume-detail></volume-detail>"
                     })
+                    .state("events", {
+                        url: "/events",
+                        template: "<event-list></event-list>"
+                    })
                     .state("tasks", {
-                        url: "/tasks",
+                        url: "/tasks/:clusterId",
                         template: "<tasks></tasks>"
                     })
                     .state("users", {
@@ -88,10 +104,10 @@
                         url: "/admin/users/edit/:userId",
                         template: "<edit-user></edit-user>"
                     })
-                    .state("alerts", {
-                        url: "/alerts",
-                        template: "<alerts></alerts>"
-                    })
+                    // .state("alerts", {
+                    //     url: "/alerts",
+                    //     template: "<alerts></alerts>"
+                    // })
                     .state("task-detail", {
                         url: "/admin/tasks/:taskId",
                         template: "<task-detail></task-detail>"
@@ -103,7 +119,7 @@
 
             });
             storageModule.run(function($rootScope, $location, $http, $interval, menuService, AuthManager, utils, eventStore, config, clusterStore, userStore) {
-                var restrictedPage, loggedIn, notificationTimer;
+                var restrictedPage, loggedIn, alertListTimer;
 
                 $rootScope.$on("$locationChangeStart", function(event, current, next) {
                     // redirect to login page if not logged in and trying to access a restricted page
@@ -135,12 +151,18 @@
                     $rootScope.userRole = AuthManager.getUserRole();
                 }
 
+                $rootScope.forceHideNav = function() {
+                    return !$rootScope.selectedClusterOption
+                        || $rootScope.selectedClusterOption === "allClusters"
+                        || !AuthManager.isUserLoggedIn;
+                }
+
                 if (AuthManager.isUserLoggedIn) {
                     /* Tracking the current URI for navigation*/
                     $rootScope.isAPINotFoundError = false;
                     $rootScope.clusterData = null;
-                    $rootScope.notificationList = null;
-                    $rootScope.selectedClusterOption = "allClusters";
+                    $rootScope.alertList = null;
+                    $rootScope.selectedClusterOption = null;
                     menuService.setMenus();
 
                     var url = $location.path();
@@ -150,42 +172,40 @@
                         $rootScope.$broadcast("GotClusterData", $rootScope.clusterData); // going down!
                         if ($rootScope.clusterData !== null && $rootScope.clusterData.length !== 0) {
                             /* Forward to cluster view if we have cluster data. */
-                            getNotificationList();
+                            getAlertList();
                         }
                     }).catch(function(error) {
                         $rootScope.$broadcast("GotClusterData", $rootScope.clusterData); // going down!
                         $rootScope.isAPINotFoundError = true;
-                    }).finally(function() {
-                        $rootScope.isNavigationShow = true;
                     });
                 }
 
 
-                function getNotificationList() {
-                    eventStore.getNotificationList()
-                        .then(function(notificationList) {
-                            $interval.cancel(notificationTimer);
-                            $rootScope.notificationList = notificationList;
-                            $rootScope.$broadcast("GotNoticationData", $rootScope.notificationList);
-                            startNotificationTimer();
+                function getAlertList() {
+                    eventStore.getAlertList()
+                        .then(function(alertList) {
+                            $interval.cancel(alertListTimer);
+                            $rootScope.alertList = alertList;
+                            $rootScope.$broadcast("GotAlertData", $rootScope.alertList);
+                            startAlertTimer();
                         })
                         .catch(function(error) {
-                            $rootScope.notificationList = null;
+                            $rootScope.alertList = null;
                         });
                 }
 
-                function startNotificationTimer() {
-                    notificationTimer = $interval(function() {
-                        getNotificationList();
+                function startAlertTimer() {
+                    alertListTimer = $interval(function() {
+                        getAlertList();
                     }, 1000 * config.eventsRefreshIntervalTime, 1);
                 }
 
                 $rootScope.$on("$destroy", function() {
-                    $interval.cancel(notificationTimer);
+                    $interval.cancel(alertListTimer);
                 });
 
                 $rootScope.$on("UserLogsOut", function() {
-                    $interval.cancel(notificationTimer);
+                    $interval.cancel(alertListTimer);
                 });
             });
 

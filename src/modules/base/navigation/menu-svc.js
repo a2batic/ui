@@ -11,17 +11,9 @@
         /* Cache the reference to this pointer */
         var vm = this;
         vm.menus = [];
-
         vm.setMenus = function() {
             vm.menus = [{
-                label: "Clusters",
-                id: "clusters",
-                href: "clusters",
-                icon: "pficon pficon-cluster",
-                active: false,
-                hasSubMenus: false,
-                show: true
-            }, {
+
                 label: "Hosts",
                 id: "hosts",
                 href: "hosts",
@@ -30,10 +22,12 @@
                 hasSubMenus: false,
                 show: true
             }, {
-                label: "Alerts",
-                id: "alerts",
-                href: "alerts",
-                icon: "fa fa-cog",
+                label: "Volumes",
+                id: "volumes",
+                href: "volumes",
+                //href: "cluster-volumes",
+                //stateParams: { clusterId: vm.clusterId },
+                icon: "pficon pficon-container-node",
                 active: false,
                 hasSubMenus: false,
                 show: true
@@ -41,25 +35,21 @@
                 label: "Tasks",
                 id: "tasks",
                 href: "tasks",
+                //stateParams: { clusterId: vm.clusterId },
                 icon: "fa fa-cog",
                 active: false,
                 hasSubMenus: false,
                 show: true
             }, {
-                label: "Admin",
-                id: "admin",
-                href: "admin",
+                label: "Events",
+                id: "events",
+                href: "events",
+                //href: "cluster-events",
+                //stateParams: { clusterId: vm.clusterId },
                 icon: "fa fa-cog",
                 active: false,
-                show: AuthManager.getUserRole() === "admin",
-                hasSubMenus: true,
-                subMenus: [{
-                    label: "Users",
-                    id: "users",
-                    href: "users",
-                    icon: "fa fa-cog",
-                    active: false
-                }]
+                hasSubMenus: false,
+                show: true
             }];
         };
 
@@ -83,7 +73,12 @@
             }
         };
 
-        vm.getMenus = function() {
+
+        vm.getMenus = function(clusterId) {
+            if (clusterId !== vm.clusterId) {
+                vm.clusterId = clusterId;
+                vm.setMenus();
+            }
             return vm.menus;
         };
 

@@ -6,9 +6,6 @@
         .component("header", {
 
             templateUrl: "/modules/base/header/header.html",
-            bindings: {
-                isNavigationShow: "="
-            },
             controller: headerController,
             controllerAs: "header"
         });
@@ -19,7 +16,11 @@
         var vm = this,
             currentUser;
 
-        vm.showNotification = false;
+        vm.showAlerts = false;
+        vm.searchBy = {};
+        vm.filterBy = "";
+        vm.severity = "";
+
         vm.notificationClose = notificationClose;
         vm.logout = logout;
         vm.homePage = homePage;
@@ -28,24 +29,28 @@
         vm.getClusterName = getClusterName;
         vm.userSetting = userSetting;
         vm.closeNotificationBar = closeNotificationBar;
-        vm.showNav = showNav;
+        vm.filterBySeverity = filterBySeverity;
+        vm.setSeverity = setSeverity;
+        vm.clearAllFilters = clearAllFilters;
+        vm.toggleNav = toggleNav;
+        vm.getUserRole = getUserRole;
 
         $rootScope.notification = Notifications.data;
-        $rootScope.selectedClusterOption = "allClusters";
 
-        $scope.$on("GotNoticationData", function(event, data) {
-            if ($rootScope.notificationList !== null) {
-                vm.notificationList = $rootScope.notificationList;
+        $scope.$on("GotAlertData", function(event, data) {
+            if ($rootScope.alertList !== null) {
+                vm.alertList = $rootScope.alertList;
+                vm.severityList = utils.getAlertSeverityList(vm.alertList);
             }
         });
 
         init();
 
-        function init(){
+        function init() {
             _getUserName();
         }
 
-        function _getUserName(){
+        function _getUserName() {
             if (!userStore.users.length) {
                 userStore.getUserInfo()
                     .then(function(data) {
@@ -54,12 +59,19 @@
             }
         }
 
-        function showNav(){
-            $rootScope.isNavigationShow = !$rootScope.isNavigationShow;
+
+        function getUserRole() {
+            return AuthManager.getUserRole();
+        }
+
+        function toggleNav(event){
+            $rootScope.$emit('toggleNav');
+            event.stopPropagation();
+            event.stopImmediatePropagation();
         }
 
         function setNotificationFlag() {
-            vm.showNotification = !vm.showNotification;
+            vm.showAlerts = !vm.showAlerts;
         }
 
         function notificationClose(data) {
@@ -67,7 +79,7 @@
         }
 
         function closeNotificationBar() {
-            vm.showNotification = false;
+            vm.showAlerts = false;
         }
 
         function logout() {
@@ -115,11 +127,14 @@
             if ($rootScope.selectedClusterOption === "allClusters") {
                 $state.go("clusters");
             } else {
-                $state.go("cluster-detail", { clusterId: $rootScope.selectedClusterOption });
+                $state.go("cluster-hosts", { clusterId: $rootScope.selectedClusterOption });
             }
         }
 
         function getClusterName(id) {
+            if (!id) {
+                return "Select a cluster...";
+            }
             if (id === "allClusters") {
                 return "All Clusters";
             } else {
@@ -134,6 +149,27 @@
                     }
                 }
             }
+        }
+
+        function filterBySeverity(list) {
+            if (!vm.severity) {
+                return list;
+            } else if (list.severity.charAt(0) === vm.severity.charAt(0)) {
+                return list;
+            }
+        }
+
+        function setSeverity(value) {
+            vm.severity = value;
+            vm.filterBy = "severity";
+            vm.filterByValue = "Severity";
+            vm.searchBy[vm.filterBy] = value;
+        }
+
+        function clearAllFilters() {
+            vm.searchBy = {};
+            vm.filterBy = "";
+            vm.severity = "";
         }
     }
 
