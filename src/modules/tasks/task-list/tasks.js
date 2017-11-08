@@ -13,7 +13,8 @@
         });
 
     /*@ngInject*/
-    function taskController($rootScope, $scope, $interval, $state, $timeout, $filter, orderByFilter, config, taskStore, utils) {
+
+    function taskController($rootScope, $scope, $interval, $state, $timeout, $filter, $stateParams, orderByFilter, config, taskStore, utils) {
 
         var vm = this,
             jobTimer,
@@ -63,6 +64,9 @@
         init();
 
         function init() {
+            vm.clusterId = $stateParams.clusterId;
+            $rootScope.selectedClusterOption = vm.clusterId;
+
             taskStore.getJobList()
                 .then(function(data) {
                     //data = orderByFilter(data, "created_at", "job_id");
