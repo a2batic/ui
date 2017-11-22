@@ -117,7 +117,7 @@
                 <div class="close">
                     <span class="pficon pficon-close" ng-click="clusterCntrl.closeExpandedView(cluster)"></span>
                 </div>
-                <div class="row">
+                <div class="row extra-overflow">
                     <ul class="nav nav-tabs">
                         <li ng-class="{'active': clusterCntrl.isTabSet(cluster, 1)}"><a href="" ng-click="clusterCntrl.setTab(cluster, 1)">Hosts</a></li>
                         <li ng-class="{'active': clusterCntrl.isTabSet(cluster, 2)}" ng-show="cluster.errors.length"><a href="" ng-click="clusterCntrl.setTab(cluster, 2)">Messages</a></li>
@@ -163,7 +163,7 @@
                             <div class="blank-slate-pf-icon">
                                 <i class="pficon pficon-cluster"></i>
                             </div>
-                            <h1>No Messages found.</h1>
+                            <h1>No Messages found</h1>
                         </div>
                     </center>
                 </div>
