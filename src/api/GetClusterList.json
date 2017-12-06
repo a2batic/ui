@@ -1,0 +1,231 @@
+{
+    "clusters": [{
+        "cluster_id": "00ad590f-a926-47c2-a644-628e5619f4ea",
+        "cluster_name": "gluster-140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a",
+        "hash": "e2638075549e8cb04819f2bb32562869",
+        "integration_id": "00ad590f-a926-47c2-a644-628e5619f4ea",
+        "sds_name": "gluster",
+        "sds_version": "4.0dev",
+        "updated_at": "2017-08-11 05:10:13.852508+00:00",
+        "is_managed": "yes",
+        "errors": [],
+        "enable_volume_profiling": true,
+        "utilization": {
+            "hash": "ef3302ea7e4e23fd037e8cfd3edb25ca",
+            "pcnt_used": "0",
+            "raw_capacity": "0",
+            "updated_at": "2017-08-11 05:10:21.747451+00:00",
+            "usable_capacity": "0",
+            "used_capacity": "0"
+        },
+        "globaldetails": {
+            "connection_active": "",
+            "connection_count": "",
+            "hash": "0cbd157d50ba3bbab9f342110c552065",
+            "status": "healthy",
+            "updated_at": "2017-08-11 05:10:21.691405+00:00",
+            "volume_up_degraded": ""
+        },
+        "public_network": "",
+        "cluster_network": "10.70.40.0/22",
+        "bricks": {
+            "all": {},
+            "used": {},
+            "free": {}
+        },
+        "nodes": {
+            "be0a6407-c6e3-4597-890b-84c4f3d848ab": {
+                "node_id": "be0a6407-c6e3-4597-890b-84c4f3d848ab",
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node_be0a6407-c6e3-4597-890b-84c4f3d848ab\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:57.424511+00:00",
+                "fqdn": "dhcp42-200.lab.eng.blr.redhat.com",
+                "hash": "079c2f5fc97cf9a0e33a9d952a9a1ce2",
+                "last_sync": "2017-08-16 06:13:57.322688+00:00"
+            },
+            "366e99e7-2026-4802-85cb-1d5ff7aeda7f": {
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/node_366e99e7-2026-4802-85cb-1d5ff7aeda7f\", \"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:54.777748+00:00",
+                "fqdn": "dhcp43-98.lab.eng.blr.redhat.com",
+                "hash": "ef4c58084bf9e3bc6904aac3eaf903d0",
+                "last_sync": "2017-08-16 06:13:54.590575+00:00",
+                "node_id": "366e99e7-2026-4802-85cb-1d5ff7aeda7f"
+            },
+            "7c5472b3-94d4-484e-b926-3621c684b128": {
+                "fqdn": "dhcp41-181.lab.eng.blr.redhat.com",
+                "hash": "8fcb7cc1fac31c0b75b2366e1788479c",
+                "last_sync": "2017-08-16 06:13:55.424932+00:00",
+                "node_id": "7c5472b3-94d4-484e-b926-3621c684b128",
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node_7c5472b3-94d4-484e-b926-3621c684b128\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:55.593749+00:00"
+            },
+            "9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb": {
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/node_9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"provisioner/gluster\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:50.359473+00:00",
+                "fqdn": "dhcp42-69.lab.eng.blr.redhat.com",
+                "hash": "30d44f47305c86c5cb7acd0955b1ed14",
+                "last_sync": "2017-08-16 06:13:50.192116+00:00",
+                "node_id": "9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb",
+                "status": "UP",
+                "sync_status": "done"
+            }
+        }
+    }, {
+        "cluster_id": "00ad590f-a926-47c2-a644-628e5619f7878",
+        "cluster_name": "gluster-140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a",
+        "hash": "e2638075549e8cb04819f2bb32562869",
+        "integration_id": "00ad590f-a926-47c2-a644-628e5619f7878",
+        "sds_name": "gluster",
+        "sds_version": "4.0dev",
+        "updated_at": "2017-08-11 05:10:13.852508+00:00",
+        "is_managed": "no",
+        "errors": ["Message 1",  "Message 2", "Message 3", "Message 4"],
+        "enable_volume_profiling": false,
+        "utilization": {
+            "hash": "ef3302ea7e4e23fd037e8cfd3edb25ca",
+            "pcnt_used": "0",
+            "raw_capacity": "0",
+            "updated_at": "2017-08-11 05:10:21.747451+00:00",
+            "usable_capacity": "0",
+            "used_capacity": "0"
+        },
+        "globaldetails": {
+            "connection_active": "",
+            "connection_count": "",
+            "hash": "0cbd157d50ba3bbab9f342110c552065",
+            "status": "healthy",
+            "updated_at": "2017-08-11 05:10:21.691405+00:00",
+            "volume_up_degraded": ""
+        },
+        "public_network": "",
+        "cluster_network": "10.70.40.0/22",
+        "bricks": {
+            "all": {},
+            "used": {},
+            "free": {}
+        },
+        "nodes": {
+            "be0a6407-c6e3-4597-890b-84c4f3d848ab": {
+                "node_id": "be0a6407-c6e3-4597-890b-84c4f3d848ab",
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node_be0a6407-c6e3-4597-890b-84c4f3d848ab\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:57.424511+00:00",
+                "fqdn": "dhcp42-200.lab.eng.blr.redhat.com",
+                "hash": "079c2f5fc97cf9a0e33a9d952a9a1ce2",
+                "last_sync": "2017-08-16 06:13:57.322688+00:00"
+            },
+            "366e99e7-2026-4802-85cb-1d5ff7aeda7f": {
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/node_366e99e7-2026-4802-85cb-1d5ff7aeda7f\", \"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:54.777748+00:00",
+                "fqdn": "dhcp43-98.lab.eng.blr.redhat.com",
+                "hash": "ef4c58084bf9e3bc6904aac3eaf903d0",
+                "last_sync": "2017-08-16 06:13:54.590575+00:00",
+                "node_id": "366e99e7-2026-4802-85cb-1d5ff7aeda7f"
+            },
+            "7c5472b3-94d4-484e-b926-3621c684b128": {
+                "fqdn": "dhcp41-181.lab.eng.blr.redhat.com",
+                "hash": "8fcb7cc1fac31c0b75b2366e1788479c",
+                "last_sync": "2017-08-16 06:13:55.424932+00:00",
+                "node_id": "7c5472b3-94d4-484e-b926-3621c684b128",
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node_7c5472b3-94d4-484e-b926-3621c684b128\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:55.593749+00:00"
+            },
+            "9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb": {
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/node_9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"provisioner/gluster\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:50.359473+00:00",
+                "fqdn": "dhcp42-69.lab.eng.blr.redhat.com",
+                "hash": "30d44f47305c86c5cb7acd0955b1ed14",
+                "last_sync": "2017-08-16 06:13:50.192116+00:00",
+                "node_id": "9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb",
+                "status": "UP",
+                "sync_status": "done"
+            }
+        }
+    }, {
+        "cluster_id": "00ad590f-a926-47c2-a644-628e5619f1234",
+        "cluster_name": "gluster-140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a",
+        "hash": "e2638075549e8cb04819f2bb32562869",
+        "integration_id": "00ad590f-a926-47c2-a644-628e5619f1234",
+        "sds_name": "gluster",
+        "sds_version": "4.0dev",
+        "updated_at": "2017-08-11 05:10:13.852508+00:00",
+        "is_managed": "no",
+        "errors": [],
+        "enable_volume_profiling": true,
+        "utilization": {
+            "hash": "ef3302ea7e4e23fd037e8cfd3edb25ca",
+            "pcnt_used": "0",
+            "raw_capacity": "0",
+            "updated_at": "2017-08-11 05:10:21.747451+00:00",
+            "usable_capacity": "0",
+            "used_capacity": "0"
+        },
+        "globaldetails": {
+            "connection_active": "",
+            "connection_count": "",
+            "hash": "0cbd157d50ba3bbab9f342110c552065",
+            "status": "healthy",
+            "updated_at": "2017-08-11 05:10:21.691405+00:00",
+            "volume_up_degraded": ""
+        },
+        "public_network": "",
+        "cluster_network": "10.70.40.0/22",
+        "bricks": {
+            "all": {},
+            "used": {},
+            "free": {}
+        },
+        "nodes": {
+            "be0a6407-c6e3-4597-890b-84c4f3d848ab": {
+                "node_id": "be0a6407-c6e3-4597-890b-84c4f3d848ab",
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node_be0a6407-c6e3-4597-890b-84c4f3d848ab\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:57.424511+00:00",
+                "fqdn": "dhcp42-200.lab.eng.blr.redhat.com",
+                "hash": "079c2f5fc97cf9a0e33a9d952a9a1ce2",
+                "last_sync": "2017-08-16 06:13:57.322688+00:00"
+            },
+            "366e99e7-2026-4802-85cb-1d5ff7aeda7f": {
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/node_366e99e7-2026-4802-85cb-1d5ff7aeda7f\", \"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:54.777748+00:00",
+                "fqdn": "dhcp43-98.lab.eng.blr.redhat.com",
+                "hash": "ef4c58084bf9e3bc6904aac3eaf903d0",
+                "last_sync": "2017-08-16 06:13:54.590575+00:00",
+                "node_id": "366e99e7-2026-4802-85cb-1d5ff7aeda7f"
+            },
+            "7c5472b3-94d4-484e-b926-3621c684b128": {
+                "fqdn": "dhcp41-181.lab.eng.blr.redhat.com",
+                "hash": "8fcb7cc1fac31c0b75b2366e1788479c",
+                "last_sync": "2017-08-16 06:13:55.424932+00:00",
+                "node_id": "7c5472b3-94d4-484e-b926-3621c684b128",
+                "status": "UP",
+                "sync_status": "done",
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"tendrl/node_7c5472b3-94d4-484e-b926-3621c684b128\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:55.593749+00:00"
+            },
+            "9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb": {
+                "tags": "[\"tendrl/integration/gluster\", \"gluster/server\", \"provisioner/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/integration/00ad590f-a926-47c2-a644-628e5619f4ea\", \"tendrl/node_9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb\", \"detected_cluster/140a9140852e87eb6d2c03c4ccd02f9bea5e481c42adc0d4a64bd9ae3ce71b6a\", \"provisioner/gluster\", \"tendrl/node\"]",
+                "updated_at": "2017-08-16 06:13:50.359473+00:00",
+                "fqdn": "dhcp42-69.lab.eng.blr.redhat.com",
+                "hash": "30d44f47305c86c5cb7acd0955b1ed14",
+                "last_sync": "2017-08-16 06:13:50.192116+00:00",
+                "node_id": "9e7fa7d0-f0b2-4bd3-84a9-6552c2df47fb",
+                "status": "UP",
+                "sync_status": "done"
+            }
+        }
+    }]
+}

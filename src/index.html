@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="layout-pf layout-pf-fixed">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../images/favicon.png" sizes="32x32" />
+    <title>Tendrl</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- inject:css -->
+    <!-- endinject -->
+
+    <link rel="stylesheet" type="text/css" href="cssLibraries/libraries.css">
+    <link href="commons/scss/main.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="jsLibraries/libraries.js"></script>
+    <script src="plugin-bundle.js" type="text/javascript"></script>
+    <base href="/TendrlModule/">
+</head>
+
+<body class="tendrl-app">
+    <header ng-if="isHeaderShow"></header>
+
+    <tendrl-nav></tendrl-nav>
+
+    <div class="container-fluid container-cards-pf container-pf-nav-pf-vertical container-pf-nav-pf-vertical-with-secondary margin-fix">
+        <div class="row">
+            <div class="col-md-12" ui-view></div>
+        </div>
+    </div>
+
+    <!-- NOT FOUND (404) Error template :
+    NOTE: by default 404 template will be hidden .
+    once isAPINotFoundError will be true and clusterData will be null.
+    than only 404 template will be visible -->
+
+<!--     <div ng-class="{'show-404-template': (isAPINotFoundError && clusterData === null) }" class="hide-404-template">
+        <div class="blank-slate-pf">
+            <div class="blank-slate-pf-icon">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            </div>
+            <h1> Tendrl API is not reachable. </h1>
+        </div>
+    </div> -->
+
+</body>
+
+</html>

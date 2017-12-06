@@ -1,0 +1,55 @@
+.tendrl-import-cluster-view-container {
+    .list-view-pf-view {
+        margin-top: 10px;
+
+        .list-group-item {
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            .host-name {
+                cursor: pointer;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+
+    .action-button {
+        margin-top: 15px;
+    }
+
+    .volume-profile {
+        margin-top: 10px;
+        font-size: 14px;
+
+        input[type=checkbox],
+        i {
+            padding: 2px;
+        }
+
+        label {
+            padding: 2px;
+            font-weight: normal;
+        }
+
+        .pficon-info {
+            color: $color-curious-blue;
+            vertical-align: middle;
+        }
+
+        .tooltip-inner {
+            max-width: 270px;
+        }
+    }
+
+    .cancel-button {
+        margin-left: 5px;
+    }
+
+    @media screen and (max-width: 576px) {
+        .centered .cancel-button {
+            margin-top: 10px;
+        }
+    }
+}

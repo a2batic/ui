@@ -1,0 +1,129 @@
+.tendrl-cluster-list-view-container {
+    margin-bottom: 10px;
+    .bold-text {
+        font-weight: bold;
+    }
+    .sorting-section {
+        border-right: none;
+    }
+    .cluster-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .host-name {
+        text-transform: initial;
+    }
+    .list-view-pf-description {
+        flex: 1 0 15%;
+        max-width: 320px;
+        @media screen and (min-width: 1024px) and (max-device-width: 1224px) {
+            flex: 1 0 0%;
+            max-width: 277px;
+        }
+        .list-group-item-text {
+            @media screen and (min-width: 1024px) and (max-device-width: 1224px) {
+                margin-right: 0;
+            }
+            width: calc(27% - 40px);
+        }
+    }
+    .list-view-pf-additional-info {
+        justify-content: space-evenly;
+        @media screen and (min-width: 1024px) and (max-device-width: 1224px) {
+            flex: 1 0 20%;
+        }
+        @media screen and (min-width: 1224px) and (max-device-width: 1280px) {
+            flex: 1 0 20%;
+        }
+        @media screen and (min-width: 768px) and (max-device-width: 1024px) {
+            flex: 1 0 49%;
+        }
+    }
+    .list-group {
+        margin-bottom: 0;
+        margin-top: 0;
+        .list-group-item {
+            .list-view-pf-expand {
+                .fa-angle-down {
+                    cursor: pointer;
+                    font-size: 17px;
+                    margin-right: 5px;
+                    margin-top: 2px;
+                    width: 10px;
+                }
+            }
+            .list-view-pf-actions {
+                width: 275px;
+                text-align: right;
+                .display {
+                    display: block;
+                }
+                /*.btn-default {
+                    width: 124px;
+                    overflow: hidden;
+                }*/
+                .btn {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    margin-left: 5px;
+                }
+                .profiling-btn {
+                    padding-right: 4px;
+                }
+            }
+            .list-view-pf-main-info {
+                padding-top: 10px;
+                .error-message {
+                    color: $color-red !important;
+                }
+                .warning-message {
+                    color: $color-red !important;
+                }
+                .cluster-text {
+                    width: 125px;
+                }
+                .ffont {
+                   font-size: 29px;
+               }
+            }
+            .nav-tabs {
+                margin-left: 5px;
+            }
+            .list-group-item-container {
+            .extra-overflow {
+                    overflow-x : hidden;
+                }
+                .list-group {
+                    margin: 0 5px;
+                    .list-view-pf-main-info {
+                        padding: 5px;
+                    }
+                }
+                &.scroll {
+                    max-height: 191px;
+                    min-height: 191px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                }
+            }
+        }
+    }
+    .not-available {
+        margin-left: 38px;
+    }
+    .fa-question {
+        width: 24px;
+    }
+    .error-list {
+        .list-view-pf-description {
+            max-width: none;
+        }
+        .list-group-item {
+            padding: 10px;
+        }
+    }
+}

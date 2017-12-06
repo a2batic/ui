@@ -1,0 +1,47 @@
+.tendrl-user-setting-modal-container {
+    min-height:375px;
+    .width-full {
+        width: 100%;
+    }
+
+    .inner-addon {
+
+        input {
+            width : 100%;
+        }
+
+        .glyphicon {
+            cursor: pointer;
+            position: absolute;
+            z-index: 1000;
+            top: 30%;
+            right: 8%;
+            background-color : $color-white;
+        }
+    }
+
+    .radio-class {
+        margin-bottom: 10px;
+    }
+
+    .bottom-button {
+        position: fixed;
+        bottom: 20px;
+        width: 100%;
+
+        .submit {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .cancel {
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: -60px;
+        }
+    }
+
+    .cp-padding {
+        padding-left: 0px;
+    }
+}
