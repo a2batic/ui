@@ -6,46 +6,51 @@
         .service("menuService", menuService);
 
     /*@ngInject*/
-    function menuService($state, $rootScope, $http, AuthManager) {
+    function menuService($state, $rootScope, $http, AuthManager, userStore) {
 
         /* Cache the reference to this pointer */
         var vm = this;
-        vm.menus = [{
-            label: "Clusters",
-            id: "cluster",
-            href: "cluster",
-            icon: "pficon pficon-cluster",
-            active: false,
-            hasSubMenus: false
-        }, {
-            label: "Hosts",
-            id: "host",
-            href: "host",
-            icon: "pficon pficon-container-node",
-            active: false,
-            hasSubMenus: false
-        }, {
-            label: "Alerts",
-            id: "alerts",
-            href: "alerts",
-            icon: "fa fa-cog",
-            active: false,
-            hasSubMenus: false
-        }, {
-            label: "Admin",
-            id: "admin",
-            href: "admin",
-            icon: "fa fa-cog",
-            active: false,
-            hasSubMenus: true,
-            subMenus: [{
+        vm.menus = [];
+        vm.setMenus = function() {
+            vm.menus = [{
+
+                label: "Hosts",
+                id: "cluster-hosts",
+                href: "cluster-hosts",
+                stateParams: { clusterId: vm.clusterId },
+                icon: "pficon pficon-container-node",
+                active: false,
+                hasSubMenus: false,
+                show: true
+            }, {
+                label: "Volumes",
+                id: "cluster-volumes",
+                href: "cluster-volumes",
+                stateParams: { clusterId: vm.clusterId },
+                icon: "pficon pficon-container-node",
+                active: false,
+                hasSubMenus: false,
+                show: true
+            }, {
                 label: "Tasks",
                 id: "tasks",
-                href: "tasks",
+                href: "cluster-tasks",
+                stateParams: { clusterId: vm.clusterId },
                 icon: "fa fa-cog",
-                active: false
-            }]
-        }];
+                active: false,
+                hasSubMenus: false,
+                show: true
+            }, {
+                label: "Events",
+                id: "cluster-events",
+                href: "cluster-events",
+                stateParams: { clusterId: vm.clusterId },
+                icon: "fa fa-cog",
+                active: false,
+                hasSubMenus: false,
+                show: true
+            }];
+        };
 
         vm.setActive = function(menuId) {
 
@@ -67,7 +72,12 @@
             }
         };
 
-        vm.getMenus = function() {
+
+        vm.getMenus = function(clusterId) {
+            if (clusterId !== vm.clusterId) {
+                vm.clusterId = clusterId;
+                vm.setMenus();
+            }
             return vm.menus;
         };
 

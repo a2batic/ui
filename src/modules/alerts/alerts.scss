@@ -13,11 +13,16 @@
         .list-group-item {
             padding-top: 20px;
             padding-bottom: 20px;
+
+            .alert-type {
+                flex: 0.3;
+            }
         }
     }
     .date-selector {
         position: relative;
-        .from-selector + .pficon, .to-selector + .pficon {
+        .from-selector + .pficon,
+        .to-selector + .pficon {
             position: absolute;
             top: 27px;
             right: 48px;
@@ -26,33 +31,61 @@
             cursor: pointer;
         }
     }
+    .disable-picker {
+        pointer-events: none;
+        color: $color-gray;
+    }
     .severity-counts {
         padding: 10px 0;
         font-size: 14px;
-        .counts {
-            cursor: pointer;
-        }
+        cursor: pointer;
     }
     .filter-section {
         margin-top: 20px;
     }
-
     .toolbar-pf-action-right {
-        margin-top:20px;
+        margin-top: 20px;
         margin-right: 12px;
         position: relative;
-
         .btn-find {
             position: absolute;
             right: 1px;
-            top:0;
+            top: 0;
         }
     }
-
     .to-date-calendar {
         border-right: none;
     }
     .invalid-msg {
         margin-top: 21px;
+        border-right: none;
+    }
+    .toolbar-pf-results {
+        border-top: none;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: baseline;
+        @media screen and (min-width: 768px) and (max-device-width: 1024px) {
+            width: 60%;
+        }
+        @media screen and (min-width: 1024px) and (max-device-width: 1224px) {
+            width: 40%;
+        }
+        @media screen and (min-width: 1224px) {
+            width: 30%;
+        }
+        .severity-counts {
+            padding-bottom: 10px;
+            .pficon {
+                vertical-align: middle;
+            }
+        }
+    }
+    .horizontal-line {
+        background-color: $color-light-grey;
+        height: 1px;
     }
 }

@@ -1,13 +1,13 @@
 //# sourceURL=storage-management-plugin.js
 (function() {
 
-    var storageModule = angular.module("TendrlModule", ["ui.router", "ui.bootstrap", "frapontillo.bootstrap-switch", "gridshore.c3js.chart", "patternfly.charts", "patternfly.card", "patternfly.form"]);
+    var storageModule = angular.module("TendrlModule", ["ui.router", "ui.bootstrap", "frapontillo.bootstrap-switch", "gridshore.c3js.chart", "patternfly.charts", "patternfly.card", "patternfly.form", "patternfly.notification"]);
 
     /* Setting up provider for getting config data */
     storageModule.provider("config", function() {
 
         /*Ideally this config should only contain
-        configuration related stuff . it should not hold 
+        configuration related stuff . it should not hold
         cluster data */
         var config = {};
 
@@ -48,30 +48,82 @@
                         url: "/login",
                         template: "<login></login>"
                     })
-                    .state("cluster", {
+                    .state("clusters", {
                         url: "/clusters",
                         template: "<cluster-list></cluster-list>"
                     })
-                    .state("host", {
+                    .state("import-cluster", {
+                        url: "/import-cluster/:clusterId",
+                        template: "<import-cluster cluster='clusterTobeImported'></import-cluster>"
+                    })
+                    /*.state("cluster-detail", {
+                        url: "/cluster-detail/:clusterId",
+                        template: "<cluster-detail></cluster-detail>"
+                    })*/
+                    .state("cluster-hosts", {
+                        url: "/cluster-hosts/:clusterId",
+                        template: "<cluster-hosts></cluster-hosts>"
+                    })
+                    .state("cluster-volumes", {
+                        url: "/cluster-volumes/:clusterId",
+                        template: "<cluster-volumes></cluster-volumes>"
+                    })
+                    .state("cluster-events", {
+                        url: "/cluster-events/:clusterId",
+                        template: "<cluster-events></cluster-events>"
+                    })
+                    .state("cluster-tasks", {
+                        url: "/cluster-tasks/:clusterId",
+                        template: "<cluster-tasks></cluster-tasks>"
+                    })
+                    /*.state("hosts", {
                         url: "/hosts",
                         template: "<host-list></host-list>"
+                    })*/
+                    .state("host-detail", {
+                        url: "/cluster-hosts/:clusterId/host-detail/:hostId",
+                        template: "<host-detail></host-detail>"
                     })
+                    .state("volume-detail", {
+                        url: "/cluster-volumes/:clusterId/volume-detail/:volumeId",
+                        template: "<volume-detail></volume-detail>"
+                    })
+                    /*.state("events", {
+                        url: "/events",
+                        template: "<event-list></event-list>"
+                    })*/
                     .state("tasks", {
-                        url: "/admin/tasks",
+                        url: "/tasks/:clusterId",
                         template: "<tasks></tasks>"
                     })
-                    .state("alerts", {
-                        url: "/alerts",
-                        template: "<alerts></alerts>"
+                    .state("users", {
+                        url: "/admin/users",
+                        template: "<users></users>"
                     })
+                    .state("add-user", {
+                        url: "/admin/users/add",
+                        template: "<add-user></add-user>"
+                    })
+                    .state("edit-user", {
+                        url: "/admin/users/edit/:userId",
+                        template: "<edit-user></edit-user>"
+                    })
+                    // .state("alerts", {
+                    //     url: "/alerts",
+                    //     template: "<alerts></alerts>"
+                    // })
                     .state("task-detail", {
-                        url: "/admin/tasks/:taskId",
+                        url: "/cluster-tasks/:clusterId/task-detail/:taskId",
                         template: "<task-detail></task-detail>"
+                    })
+                    .state("forbidden", {
+                        url: "/forbidden",
+                        template: "<div class='un-auth-user'>You are not authorised to see this view.<div>"
                     });
 
             });
-            storageModule.run(function($rootScope, $location, $http, $interval, menuService, AuthManager, utils, eventStore, config) {
-                var restrictedPage, loggedIn, notificationTimer;
+            storageModule.run(function($rootScope, $location, $http, $interval, menuService, AuthManager, utils, eventStore, config, clusterStore, userStore) {
+                var restrictedPage, loggedIn, alertListTimer;
 
                 $rootScope.$on("$locationChangeStart", function(event, current, next) {
                     // redirect to login page if not logged in and trying to access a restricted page
@@ -91,59 +143,73 @@
                     menuService.setActive(current.name);
                 });
 
+                $rootScope.$on("$stateChangeStart", function(event, next, current) {
+                    if (AuthManager.isAuthenticated(next.name)) {
+                        $location.path("/forbidden");
+                    }
+                });
+
                 if (JSON.parse(localStorage.getItem("userInfo")) && JSON.parse(localStorage.getItem("userInfo")).username && JSON.parse(localStorage.getItem("userInfo")).accessToken) {
                     AuthManager.isUserLoggedIn = true;
                     AuthManager.setAuthHeader();
+                    $rootScope.userRole = AuthManager.getUserRole();
+                }
+
+                $rootScope.forceHideNav = function() {
+                    return !$rootScope.selectedClusterOption
+                        || $rootScope.selectedClusterOption === "allClusters"
+                        || !AuthManager.isUserLoggedIn;
                 }
 
                 if (AuthManager.isUserLoggedIn) {
                     /* Tracking the current URI for navigation*/
                     $rootScope.isAPINotFoundError = false;
                     $rootScope.clusterData = null;
-                    $rootScope.notificationList = null;
+                    $rootScope.alertList = null;
+                    $rootScope.selectedClusterOption = null;
+                    menuService.setMenus();
 
                     var url = $location.path();
-                    utils.getObjectList("Cluster").then(function(list) {
+                    clusterStore.getClusterList().then(function(list) {
                         $rootScope.clusterData = list;
                         /* Setting up manual broadcast event for ClusterData*/
                         $rootScope.$broadcast("GotClusterData", $rootScope.clusterData); // going down!
-                        if ($rootScope.clusterData !== null && $rootScope.clusterData.clusters.length !== 0) {
+                        if ($rootScope.clusterData !== null && $rootScope.clusterData.length !== 0) {
                             /* Forward to cluster view if we have cluster data. */
-                            getNotificationList();
+                            getAlertList();
                         }
                     }).catch(function(error) {
                         $rootScope.$broadcast("GotClusterData", $rootScope.clusterData); // going down!
                         $rootScope.isAPINotFoundError = true;
-                    }).finally(function() {
-                        $rootScope.isNavigationShow = true;
                     });
                 }
 
-                function getNotificationList() {
-                    eventStore.getNotificationList()
-                        .then(function(notificationList) {
-                            $interval.cancel(notificationTimer);
-                            $rootScope.notificationList = notificationList;
-                            $rootScope.$broadcast("GotNoticationData", $rootScope.notificationList);
-                            startNotificationTimer();
+
+                function getAlertList() {
+                    eventStore.getAlertList()
+                        .then(function(alertList) {
+                            $interval.cancel(alertListTimer);
+                            $rootScope.alertList = alertList;
+                            $rootScope.$broadcast("GotAlertData", $rootScope.alertList);
+                            startAlertTimer();
                         })
                         .catch(function(error) {
-                            $rootScope.notificationList = null;
+                            $rootScope.alertList = null;
                         });
                 }
 
-                function startNotificationTimer() {
-                    notificationTimer = $interval(function() {
-                        getNotificationList();
+                function startAlertTimer() {
+                    alertListTimer = $interval(function() {
+                        getAlertList();
                     }, 1000 * config.eventsRefreshIntervalTime, 1);
                 }
 
                 $rootScope.$on("$destroy", function() {
-                    $interval.cancel(notificationTimer);
+                    $interval.cancel(alertListTimer);
                 });
 
                 $rootScope.$on("UserLogsOut", function() {
-                    $interval.cancel(notificationTimer);
+                    $interval.cancel(alertListTimer);
                 });
             });
 

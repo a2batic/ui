@@ -13,16 +13,16 @@
         });
 
     /*@ngInject*/
-    function LoginController($state, $rootScope, $interval,AuthManager, eventStore, config) {
+    function LoginController($state, $rootScope, $interval, AuthManager, eventStore, config, menuService, userStore) {
 
         /* Controller instance */
         var vm = this,
-            notificeTimer;
+            alertLTimer;
 
         $rootScope.isAPINotFoundError = false;
 
         if (AuthManager.isUserLoggedIn) {
-            $state.go("cluster")
+            $state.go("clusters")
         }
 
         vm.user = {};
@@ -41,15 +41,29 @@
                         AuthManager.isUserLoggedIn = true;
                         AuthManager.setAuthHeader();
                     })
+                    .catch(function(error) {
+                        AuthManager.isUserLoggedIn = false;
+
+                        if (error.status === 503) {
+                            vm.errorMsg = "Tendrl API is not reachable. Please restart the Tendrl API server by before logging in.";
+                        } else {
+                            vm.errorMsg = "The username or password you entered does not match our records. Please try again.";
+                        }
+
+                        vm.user.password = "";
+                    })
                     .then(function() {
-                        $state.go("cluster");
-                        getNotificationList();
-                        $rootScope.isNavigationShow = true;
+                        return userStore.getUserInfo();
                     })
                     .catch(function() {
-                        AuthManager.isUserLoggedIn = false;
-                        vm.errorMsg = "The username or password you entered does not match our records. Please try again.";
-                        vm.user.password = "";
+                        console.log("error in getting user details");
+                    })
+                    .then(function() {
+                        menuService.setMenus();
+                        $state.go("clusters");
+                    })
+                    .then(function() {
+                        getAlertList();
                     })
                     .finally(function() {
                         vm.formSubmitInProgress = false;
@@ -75,24 +89,28 @@
 
         }
 
-        function getNotificationList() {
-            eventStore.getNotificationList()
-                .then(function(notificationList) {
-                    $interval.cancel(notificeTimer);
-                    $rootScope.notificationList = notificationList;
-                    $rootScope.$broadcast("GotNoticationData", $rootScope.notificationList);
-                    startNotificationTimer();
+        function getAlertList() {
+            eventStore.getAlertList()
+                .then(function(alertList) {
+                    $interval.cancel(alertLTimer);
+                    $rootScope.alertList = alertList;
+                    $rootScope.$broadcast("GotAlertData", $rootScope.alertList);
+                    startAlertTimer();
                 })
                 .catch(function(error) {
-                    $rootScope.notificationList = null;
+                    $rootScope.alertList = null;
                 });
         }
 
-        function startNotificationTimer() {
-            notificeTimer = $interval(function() {
-                getNotificationList();
+        function startAlertTimer() {
+            alertLTimer = $interval(function() {
+                getAlertList();
             }, 1000 * config.eventsRefreshIntervalTime, 1);
         }
+
+        $rootScope.$on("UserLogsOut", function() {
+            $interval.cancel(alertLTimer);
+        });
 
     }
 

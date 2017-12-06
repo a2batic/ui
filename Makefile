@@ -1,7 +1,7 @@
 # store the current working directory
 NAME      := tendrl-ui
-VERSION   := 1.5.0
-RELEASE   := 1
+VERSION   := 1.5.4
+RELEASE   := 4
 COMMIT := $(shell git rev-parse HEAD)
 SHORTCOMMIT := $(shell echo $(COMMIT) | cut -c1-7)
 
@@ -14,7 +14,7 @@ build-pkgs-dist:
 
 dist:
 	mkdir -p $(NAME)-$(VERSION)
-	cp *.js package.json README.md $(NAME)-$(VERSION)/
+	cp *.js package.json LICENSE README.md $(NAME)-$(VERSION)/
 	cp -r docs $(NAME)-$(VERSION)/
 	cp -r src $(NAME)-$(VERSION)/
 	tar -zcf $(NAME)-$(VERSION).tar.gz $(NAME)-$(VERSION)

@@ -6,7 +6,7 @@
         .service("utils", utils);
 
     /*@ngInject*/
-    function utils($http, $rootScope, $filter, config, AuthManager) {
+    function utils($http, $rootScope, $state, $filter, config, AuthManager, $location) {
 
         /* Cache the reference to this pointer */
         var vm = this,
@@ -20,11 +20,12 @@
             len,
             clusterObj;
 
-        vm.getObjectList = function(objectType, clusterId) {
+
+        vm.getObjectList = function() {
             var url = "",
                 getObjectListRequest, request;
 
-            url = config.baseUrl + "Get" + objectType + "List";
+            url = config.baseUrl + "clusters";
 
             getObjectListRequest = {
                 method: "GET",
@@ -47,10 +48,10 @@
                 request;
 
             url = config.baseUrl + "jobs";
+            //url = "/api/jobs.json";
 
             getJobListRequest = {
                 method: "GET",
-                //url: "jobs"
                 url: url
             };
 
@@ -89,7 +90,7 @@
             hostList = [];
             len = hostListArray.length;
             for (i = 0; i < len; i++) {
-                if (hostListArray[i].tendrlcontext.integration_id === clusterId) {
+                if (hostListArray[i].cluster.integration_id === clusterId) {
                     hostList.push(hostListArray[i]);
                 }
             }
@@ -115,6 +116,8 @@
         vm.checkErrorCode = function(e) {
             if (e.status === 401) {
                 AuthManager.handleUnauthApi();
+            } else if ((e.status === 500) || (e.status === 403)) {
+                $state.go("clusters");
             }
         };
 
@@ -127,7 +130,7 @@
             }
 
             return list;
-        }
+        };
 
         vm.getTaskLogs = function(jobId) {
             var url,
@@ -200,8 +203,8 @@
                 getAlertListRequest,
                 request;
 
-            //url = "/api/alerts.json";
-            url = config.baseUrl + "alerts";
+            url = "/api/alerts.json";
+            // url = config.baseUrl + "notifications";
 
             getAlertListRequest = {
                 method: "GET",
@@ -227,25 +230,25 @@
             return filteredList;
         };
 
-        vm.getNotificationList = function() {
+        vm.getEventList = function() {
             var url,
-                getNotificationListRequest,
+                getEventListRequest,
                 request;
 
-            //url = "/api/notification.json";
+            //url = "/api/events.json";
             url = config.baseUrl + "notifications";
 
-            getNotificationListRequest = {
+            getEventListRequest = {
                 method: "GET",
                 url: url
             };
 
-            request = angular.copy(getNotificationListRequest);
+            request = angular.copy(getEventListRequest);
             return $http(request).then(function(response) {
                 return response.data;
             }, function(e) {
                 vm.checkErrorCode(e);
-                console.log("Error Occurred: while fetching getNotificationList");
+                console.log("Error Occurred: while fetching getEventList");
                 return null;
             });
         };
@@ -269,6 +272,43 @@
                 console.log("Error Occurred: while fetching Cluster IOPS");
                 return null;
             });
+        };
+
+        vm.redirectToGrafana = function(dashboardName, $event, grafanaObj){
+            var ip,
+                initialUrl,
+                dashboardTypes,
+                uri;
+
+            dashboardTypes = {
+                glance: "tendrl-gluster-at-a-glance",
+                volumes: "tendrl-gluster-volumes",
+                hosts: "tendrl-gluster-hosts",
+                bricks: "tendrl-gluster-bricks"
+            };
+            ip = $location.host();
+            initialUrl = "http://"+ ip +":3000/dashboard/db/" + dashboardTypes[dashboardName];
+
+            if(dashboardName === "glance"){
+                uri = initialUrl + "?var-cluster_id="+ grafanaObj.clusterId;
+            } else if(dashboardName === "volumes") {
+                uri = initialUrl + "?var-cluster_id="+ grafanaObj.clusterId + "&var-volume_name=" + grafanaObj.volumeName;
+            } else if(dashboardName === "hosts") {
+                uri = initialUrl + "?var-cluster_id="+ grafanaObj.clusterId + "&var-host_name=" + grafanaObj.hostName;
+            } else if(dashboardName === "bricks") {
+                uri = initialUrl + "?var-cluster_id="+ grafanaObj.clusterId + "&var-volume_name=" + grafanaObj.volumeName + "&var-host_name=" + grafanaObj.hostName + "&var-brick_path=" + grafanaObj.brickName;
+            }
+            window.open(uri);
+            $event.stopPropagation();
+        };
+
+        vm.tooltip = function($event) {
+            if ($event.target.clientWidth < $event.target.scrollWidth) {
+                return true;
+            } else {
+                return false;
+            }
+
         };
     };
 })();

@@ -13,12 +13,22 @@
         });
 
     /*@ngInject*/
-    function taskController($rootScope, $scope, $interval, $state, $timeout, $filter, orderByFilter, config, taskStore) {
+
+    function taskController($rootScope, $scope, $interval, $state, $timeout, $filter, $stateParams, orderByFilter, config, taskStore, utils) {
 
         var vm = this,
             jobTimer,
             toDate,
             count;
+
+        vm.tasksStatus = ["processing", "finished", "failed"];
+        vm.taskList = [];
+        vm.isDataLoading = true;
+        vm.flag = false;
+        vm.filterBy = "job_id";
+        vm.filterByValue = "Task ID";
+        vm.filterPlaceholder = "Task ID";
+        count = 1;
 
         vm.goToTaskDetail = goToTaskDetail;
         vm.getStatusText = getStatusText;
@@ -26,10 +36,10 @@
         vm.isSelectedStatus = isSelectedStatus;
         vm.filterByStatus = filterByStatus;
         vm.filterByCreatedDate = filterByCreatedDate;
-        
-        vm.tasksStatus = [];
-        vm.isDataLoading = true;
-        count = 1;
+        vm.clearDate = clearDate;
+        vm.clearAllFilters = clearAllFilters;
+        vm.addTooltip = addTooltip;
+        vm.changingFilterBy = changingFilterBy;
 
         vm.date = {
             fromDate: "",
@@ -54,14 +64,32 @@
         init();
 
         function init() {
+            vm.clusterId = $stateParams.clusterId;
+            $rootScope.selectedClusterOption = vm.clusterId;
+
             taskStore.getJobList()
                 .then(function(data) {
                     //data = orderByFilter(data, "created_at", "job_id");
                     //data = orderByFilter(data, "job_id");
                     vm.taskList = data;
+                    _setUpdatedDate();
                     vm.isDataLoading = false;
                     startTimer();
                 });
+        }
+
+        function _setUpdatedDate() {
+            var len,
+                temp,
+                i;
+
+            len = vm.taskList.length;
+
+            for (i = 0; i < len; i++) {
+                temp = new Date(vm.taskList[i].updated_at);
+                vm.taskList[i].updatedAt = temp;
+            }
+
         }
 
         function startTimer() {
@@ -72,6 +100,7 @@
                     .then(function(data) {
                         $interval.cancel(jobTimer);
                         vm.taskList = data;
+                        _setUpdatedDate();
                         vm.isDataLoading = false;
                         startTimer();
                     });
@@ -80,7 +109,9 @@
         }
 
         function goToTaskDetail(id) {
-            $state.go("task-detail", {taskId: id});
+            if (vm.clusterId) {
+                $state.go("task-detail", { clusterId: vm.clusterId, taskId: id });
+            }
         }
 
         function getStatusText(status) {
@@ -93,31 +124,10 @@
                 return "Completed with Errors";
             } else if (status === "processing") {
                 return "Processing";
-            } else if(status === "new") {
+            } else if (status === "new") {
                 return "New";
             }
         }
-
-        // function _updateTaskStatus() {
-        //     var len = vm.taskList.length,
-        //         i,
-        //         j,
-        //         task;
-
-        //     for( i = 0; i < len; i++) {
-        //         (function(j) {
-        //             //j = i;
-        //             task = vm.taskList[j];
-        //             taskStore.getTaskStatus(task.job_id)
-        //                 .then(function(data) {
-        //                     console.log(j);
-        //                     task.status = data.status;
-        //                     console.log(j, vm.taskList[j].status);
-        //                 });
-                
-        //         })(i);
-        //     }
-        // }
 
         $scope.$on("$destroy", function() {
             $interval.cancel(jobTimer);
@@ -128,10 +138,10 @@
 
             index = vm.tasksStatus.indexOf(status);
 
-            if(index === -1) {
+            if (index === -1) {
                 vm.tasksStatus.push(status);
             } else {
-                vm.tasksStatus.splice(index, 1)   
+                vm.tasksStatus.splice(index, 1)
             }
         }
 
@@ -141,40 +151,79 @@
 
         //custom filter
         function filterByStatus(list) {
-            
-            if(vm.tasksStatus.length) {
+
+            if (vm.tasksStatus.length) {
                 return vm.tasksStatus.indexOf(list.status) > -1;
-            } else {
-                return list;
             }
         }
 
         function filterByCreatedDate(list) {
-            if(count === 1) {
+            if (count === 1 && vm.date.fromDate && vm.date.toDate) {
                 checkValidDates();
             }
 
-            if(vm.date.fromDate && vm.date.toDate) {
-                return Date.parse(list.created_at) >= Date.parse(vm.date.fromDate) 
-                    && Date.parse(list.created_at) <= Date.parse(vm.date.toDate);
+            if (vm.date.fromDate && vm.date.toDate) {
+                return Date.parse(list.created_at) >= Date.parse(vm.date.fromDate) && Date.parse(list.created_at) <= Date.parse(vm.date.toDate);
+            } else if (vm.date.fromDate) {
+                return Date.parse(list.created_at) >= Date.parse(vm.date.fromDate);
+            } else if (vm.date.toDate) {
+                return Date.parse(list.created_at) <= Date.parse(vm.date.toDate);
             } else {
                 return list;
             }
         }
 
         function checkValidDates() {
-            if(Date.parse(vm.date.toDate) < Date.parse(vm.date.fromDate)) {
+            if (Date.parse(vm.date.toDate) < Date.parse(vm.date.fromDate)) {
                 vm.date.toDate = "";
                 vm.invalidToDate = true;
                 count++;
             } else {
                 vm.invalidToDate = false;
-            }   
+            }
         }
 
         vm.resetCount = function() {
             count = 1;
         };
+
+        function addTooltip($event) {
+            vm.flag = utils.tooltip($event);
+        }
+
+        function clearDate(type) {
+            if (type === "from") {
+                vm.date.fromDate = "";
+            } else if (type === "to") {
+                vm.date.toDate = "";
+            }
+        }
+
+        function clearAllFilters() {
+            vm.date.toDate = "";
+            vm.date.fromDate = "";
+            vm.invalidToDate = false;
+            vm.filterBy = "job_id";
+            vm.filterByValue = "Task ID";
+            vm.filterPlaceholder = "Task ID";
+            vm.searchBy = {};
+            vm.tasksStatus = ["processing", "finished", "failed"];
+        }
+
+        function changingFilterBy(filterValue) {
+            vm.filterBy = filterValue;
+            switch (filterValue) {
+                case "job_id":
+                    vm.filterByValue = "Task ID";
+                    vm.filterPlaceholder = "Task ID";
+                    break;
+
+                case "flow":
+                    vm.filterByValue = "Task";
+                    vm.filterPlaceholder = "Task";
+                    break;
+            };
+        }
     }
 
 })();

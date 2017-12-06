@@ -7,90 +7,157 @@
 
             restrict: "E",
             templateUrl: "/modules/hosts/host-list/host-list.html",
-            bindings: {},
+            bindings: {
+                clusterId: "=?"
+            },
             controller: hostController,
             controllerAs: "hostCntrl"
         });
 
     /*@ngInject*/
-    function hostController($scope, $rootScope, $state, $interval, utils, config, nodeStore) {
+    function hostController($scope, $rootScope, $state, $interval, utils, config, nodeStore, clusterStore) {
         var vm = this,
             clusterObj,
-            hostListTimer,
-            associatedHosts = [];
+            hostListTimer;
 
         vm.isDataLoading = true;
+        vm.flag = false;
+        vm.filterBy = "name";
+        vm.orderBy = "name";
+        vm.orderByValue = "Name";
+        vm.filterByValue = "Name";
+        vm.filterPlaceholder = "Name";
+        vm.hostList = [];
+
+        vm.redirectToGrafana = redirectToGrafana;
+        vm.goToHostDetail = goToHostDetail;
+        vm.addTooltip = addTooltip;
+        vm.clearAllFilters = clearAllFilters;
+        vm.changingFilterBy = changingFilterBy;
+        vm.changingOrderBy = changingOrderBy;
+
 
         init();
 
+        /**
+         * @name init
+         * @desc contains the initialisation logic
+         * @memberOf hostController
+         */
         function init() {
-            utils.getObjectList("Node").then(function(list) {
-                vm.isDataLoading = false;
-                vm.hostList = [];
-                if (list !== null) {
-                    if (typeof $scope.clusterId !== "undefined") {
-                        associatedHosts = utils.getAssociatedHosts(list.nodes, $scope.clusterId);
-                        vm.hostList = setupHostListData(associatedHosts);
-                    } else {
-                        vm.hostList = setupHostListData(list.nodes, list.clusters);
+            vm.showDetailBtn = vm.clusterId ? true : false;
 
-                    }
-                }
-                startTimer();
-            });
+            if ($rootScope.clusterData && $rootScope.clusterData.length) {
+                var clusters;
+                clusters = clusterStore.formatClusterData($rootScope.clusterData);
+
+                nodeStore.getNodeList(clusters, vm.clusterId)
+                    .then(function(list) {
+                        $interval.cancel(hostListTimer);
+                        vm.hostList = list;
+                        startTimer();
+                    }).catch(function(e) {
+                        vm.hostList = [];
+                    }).finally(function() {
+                        vm.isDataLoading = false;
+                    });
+            } else {
+                clusterStore.getClusterList()
+                    .then(function(data) {
+
+                        var clusters;
+                        $rootScope.clusterData = data;
+                        clusters = clusterStore.formatClusterData($rootScope.clusterData);
+
+                        nodeStore.getNodeList(clusters, vm.clusterId)
+                            .then(function(list) {
+                                $interval.cancel(hostListTimer);
+                                vm.hostList = list;
+                                startTimer();
+                            }).catch(function(e) {
+                                vm.hostList = [];
+                            }).finally(function() {
+                                vm.isDataLoading = false;
+                            });
+                    });
+            }
         }
 
         function startTimer() {
 
             hostListTimer = $interval(function() {
-
-                utils.getObjectList("Node")
-                    .then(function(list) {
-                        $interval.cancel(hostListTimer);
-                        vm.isDataLoading = false;
-                        vm.hostList = [];
-                        if (list !== null) {
-                            if (typeof $scope.clusterId !== "undefined") {
-                                associatedHosts = utils.getAssociatedHosts(list.nodes, $scope.clusterId);
-                                vm.hostList = setupHostListData(associatedHosts);
-                            } else {
-                                vm.hostList = setupHostListData(list.nodes, list.clusters);
-                            }
-                        }
-                        startTimer();
-                    });
-
+                init();
             }, 1000 * config.nodeRefreshIntervalTime, 1);
         }
 
-        function setupHostListData(list, clusters) {
-            var i,
-                j,
-                length = list.length,
-                hostList = [],
-                tagsList,
-                index,
-                host, stats, tags;
-
-            for (i = 0; i < length; i++) {
-                host = {};
-
-                host.cluster_id = list[i].tendrlcontext.cluster_id;
-                host.id = list[i].node_id;
-                host.status = list[i].status;
-                host.name = list[i].fqdn;
-                host.role = nodeStore.findRole(list[i].tags);
-                host.cluster_name = list[i].tendrlcontext.cluster_name;
-
-                hostList.push(host);
-            }
-            return hostList;
+        function redirectToGrafana(host, $event) {
+            utils.redirectToGrafana("hosts", $event, {
+                clusterId: host.integrationId,
+                hostName: host.name.split(".").join("_")
+            });
         }
 
         /*Cancelling interval when scope is destroy*/
-        $scope.$on('$destroy', function() {
+        $scope.$on("$destroy", function() {
             $interval.cancel(hostListTimer);
         });
+
+        function goToHostDetail(host) {
+            if (vm.clusterId) {
+                $state.go("host-detail", { clusterId: vm.clusterId, hostId: host.id });
+            }
+        }
+
+        function addTooltip($event) {
+            vm.flag = utils.tooltip($event);
+        }
+
+        function clearAllFilters() {
+            vm.searchBy = {};
+            vm.filterBy = "name";
+        }
+
+        function changingFilterBy(filterValue) {
+            vm.filterBy = filterValue;
+            switch (filterValue) {
+                case "name":
+                    vm.filterByValue = "Name";
+                    vm.filterPlaceholder = "Name";
+                    break;
+
+                case "cluster_name":
+                    vm.filterByValue = "Cluster";
+                    vm.filterPlaceholder = "Cluster Name";
+                    break;
+
+                case "role":
+                    vm.filterByValue = "Role";
+                    vm.filterPlaceholder = "Role";
+                    break;
+
+                case "status":
+                    vm.filterByValue = "Status";
+                    vm.filterPlaceholder = "Status";
+                    break;
+            };
+        }
+
+        function changingOrderBy(orderValue) {
+            vm.orderBy = orderValue;
+            switch (orderValue) {
+                case "name":
+                    vm.orderByValue = "Name";
+                    break;
+
+                case "cluster_name":
+                    vm.orderByValue = "Cluster";
+                    break;
+
+                case "role":
+                    vm.orderByValue = "Role";
+                    break;
+            };
+        }
     }
 
 })();
