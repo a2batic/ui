@@ -48,6 +48,7 @@
                 temp.isProfilingEnabled = data[i].enable_volume_profiling === "yes" ? "Enabled" : "Disabled";
                 temp.managed = data[i].is_managed === "yes" ? "Yes" : "No";
                 temp.importStatus = data[i].import_status;
+                temp.statusIcon = "Not Managed";
 
                 if (temp.managed === "Yes") {
                         if (temp.sdsName === "gluster") {
@@ -121,7 +122,7 @@
                 temp.fqdn = obj.fqdn;
                 temp.status = obj.status;
                 tags = nodeStore.findRole(obj.tags);
-                temp.role = tags.role;
+                temp.role = tags ? tags.role : "None";
                 temp.release = tags.release !== "NA" ? (tags.release + " " + data.sds_version) : "NA";
                 hostList.push(temp)
             }

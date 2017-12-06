@@ -1,4 +1,5 @@
 .tendrl-cluster-list-view-container {
+    margin-bottom: 10px;
     .bold-text {
         font-weight: bold;
     }
@@ -85,11 +86,17 @@
                 .cluster-text {
                     width: 125px;
                 }
+                .ffont {
+                   font-size: 29px;
+               }
             }
             .nav-tabs {
                 margin-left: 5px;
             }
             .list-group-item-container {
+            .extra-overflow {
+                    overflow-x : hidden;
+                }
                 .list-group {
                     margin: 0 5px;
                     .list-view-pf-main-info {

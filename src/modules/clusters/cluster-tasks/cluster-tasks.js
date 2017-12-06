@@ -3,20 +3,19 @@
 
     angular
         .module("TendrlModule")
-        .component("clusterHosts", {
+        .component("clusterTasks", {
 
             restrict: "E",
-            templateUrl: "/modules/clusters/cluster-hosts/cluster-hosts.html",
+            templateUrl: "/modules/clusters/cluster-tasks/cluster-tasks.html",
             bindings: {},
-            controller: clusterHostsController,
+            controller: clusterTasksController,
             controllerAs: "vm"
         });
 
     /*@ngInject*/
-    function clusterHostsController($stateParams, $scope, $rootScope, $interval, utils, clusterStore, config) {
+    function clusterTasksController($stateParams, $scope, $rootScope, $interval, utils, clusterStore, config) {
 
-        var vm = this,
-            clusterDetailTimer;
+        var vm = this;
         vm.isDataLoading = true;
 
         init();
@@ -24,7 +23,7 @@
         /**
          * @name init
          * @desc contains the initialisation logic
-         * @memberOf clusterHostsController
+         * @memberOf clusterEventsController
          */
         function init() {
             vm.clusterId = $stateParams.clusterId;
@@ -42,11 +41,6 @@
                 vm.isDataLoading = false;
             }
         }
-
-         /*Cancelling interval when scope is destroy*/
-        $scope.$on("$destroy", function() {
-            $interval.cancel(clusterDetailTimer);
-        });
 
         /***Private Functions***/
 

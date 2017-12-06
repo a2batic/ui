@@ -1,4 +1,13 @@
-.tendrl-task-detail-view-container {
+.tendrl-cluster-events-container {
+
+    .push-top {
+        padding-top: 20px;
+    }
+
+    .cluster-detail-nav>li.active>a {
+        background-color: $color-light-grey;
+    }
+
     .custom-breadcrumb {
         list-style: none;
         min-width: 50px;
@@ -15,8 +24,8 @@
             .cluster-name {
                 display: inline-block;
                 height: 25px;
+            //    line-height: 25px;
                 text-align: center;
-                width: 225px;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
@@ -56,52 +65,6 @@
                 top: 20px;
                 left: 20px;
             }
-        }
-    }
-    .detail-label {
-        margin-left: 8px;
-        padding-right: 0px;
-    }
-    .status-value {
-        text-transform: capitalize;
-    }
-
-    .status-icon {
-        margin-right: 5px;
-    }
-
-    .div-with-scroll-logs {
-        max-height: 700px;
-        padding: 0;
-
-        .list-group-item:nth-child(2n+1) {
-            background-color: $color-white-smoke;
-            border-left-color: transparent;
-            border-right-color: transparent;
-        }
-
-        .table-heading {
-            padding: 10px 0 10px 10px;
-            font-size: 16px;
-            background-color: $color-white-smoke;
-            margin-right: 0;
-        }
-
-        overflow: auto;
-        overflow-x: hidden;
-        margin: 20px 0;
-
-        .row {
-            margin-left: 0;
-        }
-
-        .logs {
-            padding-left: 0;
-            padding-right: 0;
-            margin-right: 0;
-        }
-        .list-group-item {
-            border: none;
         }
     }
 }

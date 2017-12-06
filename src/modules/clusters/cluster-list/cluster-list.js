@@ -147,7 +147,7 @@
          * @memberOf clusterController
          */
         function goToClusterDetail(cluster) {
-            $state.go("cluster-detail", { clusterId: cluster.clusterId });
+            $state.go("cluster-hosts", { clusterId: cluster.clusterId });
         }
 
         function redirectToGrafana(cluster, $event) {

@@ -109,7 +109,9 @@
         }
 
         function goToTaskDetail(id) {
-            $state.go("task-detail", { taskId: id });
+            if (vm.clusterId) {
+                $state.go("task-detail", { clusterId: vm.clusterId, taskId: id });
+            }
         }
 
         function getStatusText(status) {

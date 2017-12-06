@@ -15,18 +15,18 @@
             vm.menus = [{
 
                 label: "Hosts",
-                id: "hosts",
-                href: "hosts",
+                id: "cluster-hosts",
+                href: "cluster-hosts",
+                stateParams: { clusterId: vm.clusterId },
                 icon: "pficon pficon-container-node",
                 active: false,
                 hasSubMenus: false,
                 show: true
             }, {
                 label: "Volumes",
-                id: "volumes",
-                href: "volumes",
-                //href: "cluster-volumes",
-                //stateParams: { clusterId: vm.clusterId },
+                id: "cluster-volumes",
+                href: "cluster-volumes",
+                stateParams: { clusterId: vm.clusterId },
                 icon: "pficon pficon-container-node",
                 active: false,
                 hasSubMenus: false,
@@ -34,18 +34,17 @@
             }, {
                 label: "Tasks",
                 id: "tasks",
-                href: "tasks",
-                //stateParams: { clusterId: vm.clusterId },
+                href: "cluster-tasks",
+                stateParams: { clusterId: vm.clusterId },
                 icon: "fa fa-cog",
                 active: false,
                 hasSubMenus: false,
                 show: true
             }, {
                 label: "Events",
-                id: "events",
-                href: "events",
-                //href: "cluster-events",
-                //stateParams: { clusterId: vm.clusterId },
+                id: "cluster-events",
+                href: "cluster-events",
+                stateParams: { clusterId: vm.clusterId },
                 icon: "fa fa-cog",
                 active: false,
                 hasSubMenus: false,

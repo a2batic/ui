@@ -56,10 +56,10 @@
                         url: "/import-cluster/:clusterId",
                         template: "<import-cluster cluster='clusterTobeImported'></import-cluster>"
                     })
-                    .state("cluster-detail", {
+                    /*.state("cluster-detail", {
                         url: "/cluster-detail/:clusterId",
                         template: "<cluster-detail></cluster-detail>"
-                    })
+                    })*/
                     .state("cluster-hosts", {
                         url: "/cluster-hosts/:clusterId",
                         template: "<cluster-hosts></cluster-hosts>"
@@ -72,22 +72,26 @@
                         url: "/cluster-events/:clusterId",
                         template: "<cluster-events></cluster-events>"
                     })
-                    .state("hosts", {
+                    .state("cluster-tasks", {
+                        url: "/cluster-tasks/:clusterId",
+                        template: "<cluster-tasks></cluster-tasks>"
+                    })
+                    /*.state("hosts", {
                         url: "/hosts",
                         template: "<host-list></host-list>"
-                    })
+                    })*/
                     .state("host-detail", {
-                        url: "/cluster-detail/:clusterId/host-detail/:hostId",
+                        url: "/cluster-hosts/:clusterId/host-detail/:hostId",
                         template: "<host-detail></host-detail>"
                     })
                     .state("volume-detail", {
-                        url: "/cluster-detail/:clusterId/volume-detail/:volumeId",
+                        url: "/cluster-volumes/:clusterId/volume-detail/:volumeId",
                         template: "<volume-detail></volume-detail>"
                     })
-                    .state("events", {
+                    /*.state("events", {
                         url: "/events",
                         template: "<event-list></event-list>"
-                    })
+                    })*/
                     .state("tasks", {
                         url: "/tasks/:clusterId",
                         template: "<tasks></tasks>"
@@ -109,7 +113,7 @@
                     //     template: "<alerts></alerts>"
                     // })
                     .state("task-detail", {
-                        url: "/admin/tasks/:taskId",
+                        url: "/cluster-tasks/:clusterId/task-detail/:taskId",
                         template: "<task-detail></task-detail>"
                     })
                     .state("forbidden", {

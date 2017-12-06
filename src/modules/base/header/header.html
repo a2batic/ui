@@ -1,6 +1,6 @@
 <nav class="navbar-pf-vertical tendrl-header-container">
     <div class="navbar-header">
-        <button ng-class="{'navigation-hide': $root.forceHideNav()}" class="navbar-toggle" type="button" href="" ng-click="header.toggleNav($event)">
+        <button ng-if="!$root.forceHideNav()" ng-class="{'navigation-hide': $root.forceHideNav()}" class="navbar-toggle" type="button" href="" ng-click="header.toggleNav($event)">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -12,7 +12,7 @@
         <select id="repeatSelect" ng-model="$root.selectedClusterOption" class="cluster-options btn btn-default dropdown-toggle filterSelect" ng-change="header.goToClusterPage()" uib-tooltip-html="header.getClusterName($root.selectedClusterOption)" tooltip-placement="auto bottom">
             <option value="" disabled ng-selected="!$root.selectedClusterOption">Select a cluster...</option>
             <option value="allClusters" ng-selected="$root.selectedClusterOption === 'allClusters'">All Clusters</option>
-            <option ng-repeat="cluster in $root.clusterData" value="{{cluster.cluster_id}}" ng-selected="$root.selectedClusterOption === '{{cluster.cluster_id}}'">{{cluster.cluster_id}}</option>
+            <option ng-repeat="cluster in $root.clusterData" value="{{cluster.cluster_id}}" ng-selected="$root.selectedClusterOption === '{{cluster.cluster_id}}'" ng-disabled="cluster.is_managed !== 'yes'">{{cluster.cluster_id}}</option>
         </select>
     </div>
     <nav class="collapse navbar-collapse">
@@ -85,7 +85,7 @@
                 <div class="blank-slate-pf-icon">
                     <i class="pficon pficon-cluster"></i>
                 </div>
-                <h1>No Alerts Detected.</h1>
+                <h1>No Alerts Detected</h1>
             </div>
         </center>
         <div class="notification-list-container">
