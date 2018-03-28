@@ -24,7 +24,7 @@
 
         vm.isDataLoading = true;
         vm.isMessagesLoading = true;
-        vm.taskDetail = [];
+        //vm.taskDetail = [];
         vm.goToClusterDetail = goToClusterDetail;
 
         init();
